@@ -4,6 +4,10 @@ import { Modal, Button, Table, Form } from "react-bootstrap";
 const ModalA = ({ show, onClose }) => {
   const [allContacts, setAllContacts] = useState([]);
   const [onlyEven, setOnlyEven] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [filteredContacts, setFilteredContacts] = useState([]);
+
   const handleAllContactsClick = async () => {
     try {
       const response = await fetch(
@@ -11,7 +15,8 @@ const ModalA = ({ show, onClose }) => {
       );
       if (response.ok) {
         const data = await response.json();
-        setAllContacts(data);
+        setAllContacts(data.results);
+        setFilteredContacts(data.results);
       } else {
         throw new Error("Failed to fetch data");
       }
@@ -26,10 +31,39 @@ const ModalA = ({ show, onClose }) => {
 
   const handleCheckboxChange = e => {
     setOnlyEven(e.target.checked);
+    filterContacts(searchQuery, e.target.checked);
   };
-  const filteredContacts = onlyEven
-    ? allContacts.results?.filter(contact => contact.id % 2 === 0)
-    : allContacts.results;
+
+  const handleSearchChange = e => {
+    setSearchQuery(e.target.value);
+    filterContacts(e.target.value, onlyEven);
+  };
+
+  const filterContacts = (query, isEven) => {
+    let filtered = [...allContacts];
+
+    if (query) {
+      filtered = filtered.filter(contact =>
+        contact.name.toLowerCase().includes(query.toLowerCase())
+      );
+    }
+
+    if (isEven) {
+      filtered = filtered.filter(contact => contact.id % 2 === 0);
+    }
+
+    setFilteredContacts(filtered);
+  };
+  const handleSearch = e => {
+    const value = e.target.value;
+    setSearchQuery(value);
+
+    // Filter contacts based on search query
+    const filteredContacts = allContacts.filter(contact =>
+      contact.name.toLowerCase().includes(value.toLowerCase())
+    );
+    setSearchResults(filteredContacts);
+  };
   return (
     <Modal show={show} onHide={onClose}>
       <Modal.Header>
@@ -83,6 +117,21 @@ const ModalA = ({ show, onClose }) => {
         />
       </Modal.Body>
       <Modal.Footer className="justify-content-between">
+        <div className="mb-4 d-flex justify-content-center text-black p-2">
+          <Form.Control
+            type="text"
+            placeholder="Search contacts..."
+            value={searchQuery}
+            onChange={handleSearch}
+          />
+        </div>
+        <div>
+          {searchResults.map(contact => (
+            <span key={contact.id}>
+              <p>{contact.name}</p>
+            </span>
+          ))}
+        </div>
         <div>
           <Button
             style={{
