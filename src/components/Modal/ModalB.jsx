@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Button } from "react-bootstrap";
+import { Modal, Button, Table, Form } from "react-bootstrap";
 const ModalB = ({ show, onClose }) => {
-  const [allContacts, setAllContacts] = useState([]);
-
-  const handleAllContactsClick = async () => {
+  const [usContacts, setUSContacts] = useState([]);
+  const [onlyEven, setOnlyEven] = useState(false);
+  const handleUSContactsClick = async () => {
     try {
       const response = await fetch(
         "https://contact.mediusware.com/api/country-contacts/United States/"
       );
       if (response.ok) {
         const data = await response.json();
-        setAllContacts(data);
+        setUSContacts(data);
       } else {
         throw new Error("Failed to fetch data");
       }
@@ -20,9 +20,14 @@ const ModalB = ({ show, onClose }) => {
   };
 
   useEffect(() => {
-    handleAllContactsClick();
+    handleUSContactsClick();
   }, []);
-
+  const handleCheckboxChange = e => {
+    setOnlyEven(e.target.checked);
+  };
+  const filteredContacts = onlyEven
+    ? usContacts.results?.filter(contact => contact.id % 2 === 0)
+    : usContacts.results;
   return (
     <>
       <Modal show={show} onHide={onClose}>
@@ -33,11 +38,41 @@ const ModalB = ({ show, onClose }) => {
           className="mx-auto text-center "
           style={{ width: "100%", maxHeight: "300px", overflowY: "auto" }}
         >
-          {allContacts?.results?.map(contact => (
-            <p key={contact.id} className="mb-2">
-              {contact.country.name}
-            </p>
-          ))}
+          <Table striped bordered hover responsive>
+            <thead>
+              <tr>
+                <th style={{ backgroundColor: "#46139f", color: "white" }}>
+                  Country
+                </th>
+                <th
+                  style={{ backgroundColor: "#ff7f50", color: "white" }}
+                  className="text-end"
+                >
+                  Phone
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {usContacts?.results?.map((contact, index) => (
+                <tr
+                  key={contact.id}
+                  style={{
+                    backgroundColor: index % 2 === 0 ? "#ff7f50" : "gray",
+                  }}
+                >
+                  <td>{contact.country.name}</td>
+                  <td className="text-end">{contact.phone}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+          <Form.Check
+            type="checkbox"
+            label="Only even"
+            checked={onlyEven}
+            onChange={handleCheckboxChange}
+            className="mx-auto bg-dark text-white rounded col-auto"
+          />
         </Modal.Body>
         <Modal.Footer className="justify-content-between">
           <div>

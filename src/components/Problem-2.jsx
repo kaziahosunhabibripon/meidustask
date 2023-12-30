@@ -38,9 +38,11 @@ const Problem2 = () => {
           </button>
         </div>
 
-        {showModalA && (
-          <ModalA show={showModalA} onClose={() => setShowModalA(false)} />
-        )}
+        <div className="w-full">
+          {showModalA && (
+            <ModalA show={showModalA} onClose={() => setShowModalA(false)} />
+          )}
+        </div>
 
         {/* Render ModalB based on state */}
         {showModalB && (
