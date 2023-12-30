@@ -30,7 +30,19 @@ const Problem1 = () => {
 
   const filteredTasks = () => {
     if (show === "all") {
-      return tasks;
+      const activeTasks = tasks.filter(
+        task => task.status.toLowerCase() === "active"
+      );
+      const completedTasks = tasks.filter(
+        task => task.status.toLowerCase() === "completed"
+      );
+      const pendingTasks = tasks.filter(
+        task =>
+          task.status.toLowerCase() !== "active" &&
+          task.status.toLowerCase() !== "completed"
+      );
+
+      return [...activeTasks, ...completedTasks, ...pendingTasks];
     } else {
       return tasks.filter(task => task.status.toLowerCase() === show);
     }
