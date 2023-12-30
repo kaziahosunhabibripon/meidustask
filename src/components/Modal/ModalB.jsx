@@ -6,7 +6,7 @@ const ModalB = ({ show, onClose }) => {
   const handleAllContactsClick = async () => {
     try {
       const response = await fetch(
-        "https://jsonplaceholder.typicode.com/users"
+        "https://contact.mediusware.com/api/country-contacts/United States/"
       );
       if (response.ok) {
         const data = await response.json();
@@ -22,6 +22,7 @@ const ModalB = ({ show, onClose }) => {
   useEffect(() => {
     handleAllContactsClick();
   }, []);
+
   return (
     <>
       <Modal show={show} onHide={onClose}>
@@ -32,9 +33,9 @@ const ModalB = ({ show, onClose }) => {
           className="mx-auto text-center "
           style={{ width: "100%", maxHeight: "300px", overflowY: "auto" }}
         >
-          {allContacts.map(contact => (
+          {allContacts?.results?.map(contact => (
             <p key={contact.id} className="mb-2">
-              {contact.name}
+              {contact.country.name}
             </p>
           ))}
         </Modal.Body>
