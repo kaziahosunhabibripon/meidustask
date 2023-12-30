@@ -42,6 +42,12 @@ const ModalA = ({ show, onClose }) => {
         <Table striped bordered hover responsive>
           <thead>
             <tr>
+              <th
+                style={{ backgroundColor: "#ff7f50", color: "white" }}
+                className="text-end"
+              >
+                Id
+              </th>
               <th style={{ backgroundColor: "#46139f", color: "white" }}>
                 Country
               </th>
@@ -61,6 +67,7 @@ const ModalA = ({ show, onClose }) => {
                   backgroundColor: index % 2 === 0 ? "#f5f5f5" : "white",
                 }}
               >
+                <td className="text-end">{contact.id}</td>
                 <td>{contact.country.name}</td>
                 <td className="text-end">{contact.phone}</td>
               </tr>

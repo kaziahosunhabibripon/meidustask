@@ -28,6 +28,7 @@ const ModalB = ({ show, onClose }) => {
   const filteredContacts = onlyEven
     ? usContacts.results?.filter(contact => contact.id % 2 === 0)
     : usContacts.results;
+
   return (
     <>
       <Modal show={show} onHide={onClose}>
@@ -41,6 +42,12 @@ const ModalB = ({ show, onClose }) => {
           <Table striped bordered hover responsive>
             <thead>
               <tr>
+                <th
+                  style={{ backgroundColor: "#ff7f50", color: "white" }}
+                  className="text-end"
+                >
+                  Id
+                </th>
                 <th style={{ backgroundColor: "#46139f", color: "white" }}>
                   Country
                 </th>
@@ -53,13 +60,14 @@ const ModalB = ({ show, onClose }) => {
               </tr>
             </thead>
             <tbody>
-              {usContacts?.results?.map((contact, index) => (
+              {filteredContacts?.map((contact, index) => (
                 <tr
                   key={contact.id}
                   style={{
                     backgroundColor: index % 2 === 0 ? "#ff7f50" : "gray",
                   }}
                 >
+                  <td className="text-end">{contact.id}</td>
                   <td>{contact.country.name}</td>
                   <td className="text-end">{contact.phone}</td>
                 </tr>

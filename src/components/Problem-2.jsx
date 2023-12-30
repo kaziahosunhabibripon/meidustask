@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import ModalA from "../components/Modal/ModalA"; // Import your Modal components
 import ModalB from "../components/Modal/ModalB";
-
+import { useNavigate } from "react-router-dom";
 const Problem2 = () => {
   const [showModalA, setShowModalA] = useState(false);
   const [showModalB, setShowModalB] = useState(false);
-
+  const navigate = useNavigate();
   const handleShowModalA = () => {
     setShowModalA(true);
-    // Fetch data for ModalA if required
+    navigate("/problem-2/modal-a");
   };
 
   const handleShowModalB = () => {
     setShowModalB(true);
-    // Fetch data for ModalB if required
+    navigate("/problem-2/modal-b");
   };
 
   return (
